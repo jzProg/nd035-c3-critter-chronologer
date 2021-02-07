@@ -1,4 +1,9 @@
-# Critter Chronologer Project Starter
+# Critter Chronologer
+
+My implementation of the final assessment project for Udacity's Java Web Developer Nanodegree `Data Stores and Persistence` course.
+
+## Description
+<img alt="Spring" src="https://img.shields.io/badge/spring%20-%236DB33F.svg?&style=for-the-badge&logo=spring&logoColor=white"/><img alt="MySQL" src="https://img.shields.io/badge/mysql-%2300f.svg?&style=for-the-badge&logo=mysql&logoColor=white"/>
 
 Critter Chronologer a Software as a Service application that provides a scheduling interface for a small business that takes care of animals. This Spring Boot project will allow users to create pets, owners, and employees, and then schedule events for employees to provide services for pets.
 
