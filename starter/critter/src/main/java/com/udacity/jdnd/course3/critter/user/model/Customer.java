@@ -13,7 +13,9 @@ public class Customer extends User {
 
     private String notes;
 
-    @Transient
+    @ElementCollection
+    @CollectionTable(name="customer_pet", joinColumns=@JoinColumn(name="user_id"))
+    @Column(name="pet")
     private List<Long> petIds = new ArrayList<>();
 
     public String getPhoneNumber() {
