@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.pet.service;
 
+import com.udacity.jdnd.course3.critter.exceptions.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.exceptions.UserNotFoundException;
 import com.udacity.jdnd.course3.critter.pet.dao.PetRepository;
 import com.udacity.jdnd.course3.critter.pet.model.Pet;
 import com.udacity.jdnd.course3.critter.user.model.Customer;
@@ -20,10 +22,10 @@ public class PetService {
     private UserService userService;
 
     @Transactional
-    public Pet storePet(Pet pet) {
-        long ownerId = pet.getOwnerId();
+    public Pet storePet(Pet pet) throws UserNotFoundException {
+        Customer customer = userService.fetchCustomer(pet.getOwnerId());
+        if (customer == null) throw new UserNotFoundException("Customer with id: " + pet.getOwnerId() + " not found!");
         petRepository.save(pet);
-        Customer customer = userService.fetchCustomer(ownerId);
         List<Long> petIds = customer.getPetIds();
         petIds.add(pet.getId());
         customer.setPetIds(petIds);
@@ -32,8 +34,8 @@ public class PetService {
     }
 
     @Transactional
-    public Pet fetchPet(long petId) {
-        return petRepository.findById(petId).orElse(null);
+    public Pet fetchPet(long petId) throws PetNotFoundException {
+        return petRepository.findById(petId).orElseThrow(() -> new PetNotFoundException("Pet with id: " + petId + " not Found!"));
     }
 
     @Transactional

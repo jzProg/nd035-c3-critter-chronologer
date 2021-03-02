@@ -1,5 +1,6 @@
 package com.udacity.jdnd.course3.critter.user.service;
 
+import com.udacity.jdnd.course3.critter.exceptions.UserNotFoundException;
 import com.udacity.jdnd.course3.critter.user.dao.UserRepository;
 import com.udacity.jdnd.course3.critter.user.model.Customer;
 import com.udacity.jdnd.course3.critter.user.model.Employee;
@@ -26,11 +27,11 @@ public class UserService {
     }
 
     @Transactional
-    public Customer fetchCustomerByPet(long petId) {
+    public Customer fetchCustomerByPet(long petId) throws UserNotFoundException {
         return userRepository.findAllCustomers().stream()
                 .filter(c -> c.getPetIds().contains(petId))
                 .findAny()
-                .orElse(null);
+                .orElseThrow(() -> new UserNotFoundException("Customer with pet with id: " + petId + " not Found!"));
     }
 
     @Transactional
@@ -45,19 +46,25 @@ public class UserService {
 
     @Transactional
     public Customer fetchCustomer(long customerId) {
-        return userRepository.findCustomerById(customerId);
+        Customer customer = userRepository.findCustomerById(customerId);
+        if (customer == null) throw new UserNotFoundException("Customer with id: " + customerId + " not Found!");
+        return customer;
     }
 
     @Transactional
-    public Employee fetchEmployee(long employeeId) {
-        return userRepository.findEmployeeById(employeeId);
+    public Employee fetchEmployee(long employeeId) throws UserNotFoundException {
+        Employee employee = userRepository.findEmployeeById(employeeId);
+        if (employee == null) throw new UserNotFoundException("Employee with id: " + employeeId + " not Found!");
+        return employee;
     }
 
     @Transactional
     public void updateEmployeeAvailability(long id, Set<DayOfWeek> days) {
         Employee employee = fetchEmployee(id);
-        employee.setDaysAvailable(days);
-        userRepository.save(employee);
+        if (employee != null) {
+            employee.setDaysAvailable(days);
+            userRepository.save(employee);
+        }
     }
 
     @Transactional

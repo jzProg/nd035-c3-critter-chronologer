@@ -1,5 +1,8 @@
 package com.udacity.jdnd.course3.critter.schedule.service;
 
+import com.udacity.jdnd.course3.critter.exceptions.MissingIdException;
+import com.udacity.jdnd.course3.critter.exceptions.PetNotFoundException;
+import com.udacity.jdnd.course3.critter.exceptions.UserNotFoundException;
 import com.udacity.jdnd.course3.critter.pet.model.Pet;
 import com.udacity.jdnd.course3.critter.pet.service.PetService;
 import com.udacity.jdnd.course3.critter.schedule.dao.ScheduleRepository;
@@ -26,20 +29,21 @@ public class ScheduleService {
     private PetService petService;
 
     @Transactional
-    public Schedule storeSchedule(Schedule schedule, List<Long> employees, List<Long> pets) {
+    public Schedule storeSchedule(Schedule schedule, List<Long> employeeIds, List<Long> petIds) {
+        if (employeeIds.isEmpty() || petIds.isEmpty()) throw new MissingIdException("No employee ID or pet ID...");
         scheduleRepository.save(schedule);
-        employees.forEach(e -> {
-            Employee ee = userService.fetchEmployee(e);
-            ee.getSchedules().add(schedule);
-            userService.storeEmployee(ee);
+        employeeIds.forEach(eId -> {
+            Employee e = userService.fetchEmployee(eId);
+            e.getSchedules().add(schedule);
+            userService.storeEmployee(e);
         });
-        pets.forEach(p -> {
-            Pet pp = petService.fetchPet(p);
-            pp.getSchedules().add(schedule);
-            petService.storePet(pp);
+        petIds.forEach(pId -> {
+            Pet pet = petService.fetchPet(pId);
+            pet.getSchedules().add(schedule);
+            petService.storePet(pet);
         });
-        schedule.setEmployeeIds(employees.stream().map(e -> userService.fetchEmployee(e)).collect(Collectors.toList()));
-        schedule.setPetIds(pets.stream().map(p -> petService.fetchPet(p)).collect(Collectors.toList()));
+        schedule.setEmployeeIds(employeeIds.stream().map(e -> userService.fetchEmployee(e)).collect(Collectors.toList()));
+        schedule.setPetIds(petIds.stream().map(p -> petService.fetchPet(p)).collect(Collectors.toList()));
         return schedule;
     }
 
@@ -51,12 +55,14 @@ public class ScheduleService {
     @Transactional
     public List<Schedule> fetchScheduleForPet(long petId) {
         Pet pet = petService.fetchPet(petId);
+        if (pet == null) throw new PetNotFoundException("No Pet found for id: " + petId);
         return pet.getSchedules();
     }
 
     @Transactional
     public List<Schedule> fetchScheduleForEmployee(long employeeId) {
         Employee e = userService.fetchEmployee(employeeId);
+        if (e == null) throw new UserNotFoundException("No Employee found for id: " + employeeId);
         return e.getSchedules();
     }
 
