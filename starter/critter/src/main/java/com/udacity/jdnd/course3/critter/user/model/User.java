@@ -2,6 +2,11 @@ package com.udacity.jdnd.course3.critter.user.model;
 
 import javax.persistence.*;
 
+/*
+The default Single Table Inheritance was selected due to polymorphic query performance
+and because NOT NULL constraints wasn't necessary for this project.
+*/
+
 @Entity(name = "Users")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class User {
