@@ -25,6 +25,7 @@ public class UserService {
        return userRepository.save(customer);
     }
 
+    @Transactional
     public Customer fetchCustomerByPet(long petId) {
         return userRepository.findAllCustomers().stream()
                 .filter(c -> c.getPetIds().contains(petId))
@@ -32,6 +33,7 @@ public class UserService {
                 .orElse(null);
     }
 
+    @Transactional
     public List<Customer> fetchAllCustomers() {
         return userRepository.findAllCustomers();
     }
@@ -41,10 +43,12 @@ public class UserService {
         return userRepository.save(employee);
     }
 
+    @Transactional
     public Customer fetchCustomer(long customerId) {
         return userRepository.findCustomerById(customerId);
     }
 
+    @Transactional
     public Employee fetchEmployee(long employeeId) {
         return userRepository.findEmployeeById(employeeId);
     }
@@ -56,6 +60,7 @@ public class UserService {
         userRepository.save(employee);
     }
 
+    @Transactional
     public List<Employee> findEmployeesByAvailability(Set<EmployeeSkill> skills, LocalDate date) {
        return userRepository.findAllEmployees().stream()
                .filter(e -> e.getDaysAvailable().contains(DayOfWeek.from(date)) && e.getSkills().containsAll(skills))

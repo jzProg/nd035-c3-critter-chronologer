@@ -31,14 +31,17 @@ public class PetService {
         return pet;
     }
 
+    @Transactional
     public Pet fetchPet(long petId) {
         return petRepository.findById(petId).orElse(null);
     }
 
+    @Transactional
     public List<Pet> fetchAllPets() {
         return (List<Pet>) petRepository.findAll();
     }
 
+    @Transactional
     public List<Pet> fetchPetByOwner(long ownerId) {
         return petRepository.findByOwnerId(ownerId);
     }

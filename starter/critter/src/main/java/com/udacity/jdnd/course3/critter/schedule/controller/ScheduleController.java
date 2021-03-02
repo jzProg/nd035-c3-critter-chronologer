@@ -66,18 +66,22 @@ public class ScheduleController {
 
     private Schedule convertDTOtoEntity(ScheduleDTO scheduleDTO) {
         Schedule schedule = new Schedule();
-        schedule.setActivities(scheduleDTO.getActivities());
-        schedule.setDate(scheduleDTO.getDate());
+        if (scheduleDTO != null) {
+            schedule.setActivities(scheduleDTO.getActivities());
+            schedule.setDate(scheduleDTO.getDate());
+        }
         return schedule;
     }
 
     private ScheduleDTO convertEntityToDTO(Schedule schedule) {
         ScheduleDTO scheduleDTO = new ScheduleDTO();
-        scheduleDTO.setId(schedule.getId());
-        scheduleDTO.setActivities(schedule.getActivities());
-        scheduleDTO.setDate(schedule.getDate());
-        scheduleDTO.setEmployeeIds(schedule.getEmployeeIds().stream().map(Employee::getId).collect(Collectors.toList()));
-        scheduleDTO.setPetIds(schedule.getPetIds().stream().map(Pet::getId).collect(Collectors.toList()));
+        if (schedule != null) {
+            scheduleDTO.setId(schedule.getId());
+            scheduleDTO.setActivities(schedule.getActivities());
+            scheduleDTO.setDate(schedule.getDate());
+            scheduleDTO.setEmployeeIds(schedule.getEmployeeIds().stream().map(Employee::getId).collect(Collectors.toList()));
+            scheduleDTO.setPetIds(schedule.getPetIds().stream().map(Pet::getId).collect(Collectors.toList()));
+        }
         return scheduleDTO;
     }
 }

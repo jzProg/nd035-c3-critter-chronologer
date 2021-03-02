@@ -28,7 +28,6 @@ public class PetController {
     @GetMapping("/{petId}")
     public PetDTO getPet(@PathVariable long petId) {
        Pet pet = petService.fetchPet(petId);
-       if (pet == null) return new PetDTO();
        return convertEntityToDTO(pet);
     }
 
@@ -48,22 +47,26 @@ public class PetController {
 
     private Pet convertDTOtoEntity(PetDTO petDTO) {
         Pet pet = new Pet();
-        pet.setName(petDTO.getName());
-        pet.setNotes(petDTO.getNotes());
-        pet.setOwnerId(petDTO.getOwnerId());
-        pet.setBirthDate(petDTO.getBirthDate());
-        pet.setType(petDTO.getType());
+        if (petDTO != null) {
+            pet.setName(petDTO.getName());
+            pet.setNotes(petDTO.getNotes());
+            pet.setOwnerId(petDTO.getOwnerId());
+            pet.setBirthDate(petDTO.getBirthDate());
+            pet.setType(petDTO.getType());
+        }
         return pet;
     }
 
     private PetDTO convertEntityToDTO(Pet pet) {
         PetDTO petDTO = new PetDTO();
-        petDTO.setId(pet.getId());
-        petDTO.setName(pet.getName());
-        petDTO.setNotes(pet.getNotes());
-        petDTO.setOwnerId(pet.getOwnerId());
-        petDTO.setBirthDate(pet.getBirthDate());
-        petDTO.setType(pet.getType());
+        if (pet != null) {
+            petDTO.setId(pet.getId());
+            petDTO.setName(pet.getName());
+            petDTO.setNotes(pet.getNotes());
+            petDTO.setOwnerId(pet.getOwnerId());
+            petDTO.setBirthDate(pet.getBirthDate());
+            petDTO.setType(pet.getType());
+        }
         return petDTO;
     }
 }

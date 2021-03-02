@@ -43,7 +43,6 @@ public class UserController {
     @GetMapping("/customer/pet/{petId}")
     public CustomerDTO getOwnerByPet(@PathVariable long petId){
         Customer customer = userService.fetchCustomerByPet(petId);
-        if (customer == null) return new CustomerDTO();
         return convertCustomerEntityToDTO(customer);
     }
 
@@ -56,7 +55,6 @@ public class UserController {
     @PostMapping("/employee/{employeeId}")
     public EmployeeDTO getEmployee(@PathVariable long employeeId) {
         Employee employee = userService.fetchEmployee(employeeId);
-        if (employee == null) return new EmployeeDTO();
         return convertEmployeeEntityToDTO(employee);
     }
 
@@ -75,36 +73,44 @@ public class UserController {
 
     private Customer convertCustomerDTOtoEntity(CustomerDTO customerDTO) {
         Customer customer = new Customer();
-        customer.setName(customerDTO.getName());
-        customer.setNotes(customerDTO.getNotes());
-        customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        if (customerDTO != null) {
+            customer.setName(customerDTO.getName());
+            customer.setNotes(customerDTO.getNotes());
+            customer.setPhoneNumber(customerDTO.getPhoneNumber());
+        }
         return customer;
     }
 
     private Employee convertEmployeeDTOtoEntity(EmployeeDTO employeeDTO) {
         Employee employee = new Employee();
-        employee.setName(employeeDTO.getName());
-        employee.setSkills(employeeDTO.getSkills());
-        employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        if (employeeDTO != null) {
+            employee.setName(employeeDTO.getName());
+            employee.setSkills(employeeDTO.getSkills());
+            employee.setDaysAvailable(employeeDTO.getDaysAvailable());
+        }
         return employee;
     }
 
     private CustomerDTO convertCustomerEntityToDTO(Customer customer) {
         CustomerDTO customerDTO = new CustomerDTO();
-        customerDTO.setId(customer.getId());
-        customerDTO.setName(customer.getName());
-        customerDTO.setNotes(customer.getNotes());
-        customerDTO.setPetIds(customer.getPetIds());
-        customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        if (customer != null) {
+            customerDTO.setId(customer.getId());
+            customerDTO.setName(customer.getName());
+            customerDTO.setNotes(customer.getNotes());
+            customerDTO.setPetIds(customer.getPetIds());
+            customerDTO.setPhoneNumber(customer.getPhoneNumber());
+        }
         return customerDTO;
     }
 
     private EmployeeDTO convertEmployeeEntityToDTO(Employee employee) {
         EmployeeDTO employeeDTO = new EmployeeDTO();
-        employeeDTO.setId(employee.getId());
-        employeeDTO.setName(employee.getName());
-        employeeDTO.setSkills(employee.getSkills());
-        employeeDTO.setDaysAvailable(employee.getDaysAvailable());
+        if (employee != null) {
+            employeeDTO.setId(employee.getId());
+            employeeDTO.setName(employee.getName());
+            employeeDTO.setSkills(employee.getSkills());
+            employeeDTO.setDaysAvailable(employee.getDaysAvailable());
+        }
         return employeeDTO;
     }
 
