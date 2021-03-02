@@ -1,13 +1,18 @@
 package com.udacity.jdnd.course3.critter.schedule.controller;
 
+import com.udacity.jdnd.course3.critter.pet.model.Pet;
+import com.udacity.jdnd.course3.critter.pet.service.PetService;
 import com.udacity.jdnd.course3.critter.schedule.dto.ScheduleDTO;
 import com.udacity.jdnd.course3.critter.schedule.model.Schedule;
 import com.udacity.jdnd.course3.critter.schedule.service.ScheduleService;
+import com.udacity.jdnd.course3.critter.user.model.Employee;
+import com.udacity.jdnd.course3.critter.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles web requests related to Schedules.
@@ -19,9 +24,15 @@ public class ScheduleController {
     @Autowired
     private ScheduleService scheduleService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private PetService petService;
+
     @PostMapping
     public ScheduleDTO createSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        Schedule schedule = scheduleService.storeSchedule(convertDTOtoEntity(scheduleDTO));
+        Schedule schedule = scheduleService.storeSchedule(convertDTOtoEntity(scheduleDTO), scheduleDTO.getEmployeeIds(), scheduleDTO.getPetIds());
         return convertEntityToDTO(schedule);
     }
 
@@ -57,8 +68,6 @@ public class ScheduleController {
         Schedule schedule = new Schedule();
         schedule.setActivities(scheduleDTO.getActivities());
         schedule.setDate(scheduleDTO.getDate());
-        schedule.setPetIds(scheduleDTO.getPetIds());
-        schedule.setEmployeeIds(scheduleDTO.getEmployeeIds());
         return schedule;
     }
 
@@ -67,8 +76,8 @@ public class ScheduleController {
         scheduleDTO.setId(schedule.getId());
         scheduleDTO.setActivities(schedule.getActivities());
         scheduleDTO.setDate(schedule.getDate());
-        scheduleDTO.setEmployeeIds(schedule.getEmployeeIds());
-        scheduleDTO.setPetIds(schedule.getPetIds());
+        scheduleDTO.setEmployeeIds(schedule.getEmployeeIds().stream().map(Employee::getId).collect(Collectors.toList()));
+        scheduleDTO.setPetIds(schedule.getPetIds().stream().map(Pet::getId).collect(Collectors.toList()));
         return scheduleDTO;
     }
 }

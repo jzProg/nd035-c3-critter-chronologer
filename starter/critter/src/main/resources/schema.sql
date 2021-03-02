@@ -19,10 +19,6 @@ CREATE TABLE IF NOT EXISTS PET (
 CREATE TABLE IF NOT EXISTS SCHEDULE (
     id BIGINT PRIMARY KEY auto_increment,
     activities VARCHAR(20),
-    date DATE,
-    pet_id BIGINT,
-    user_id BIGINT,
-    foreign key (user_id) references USERS(user_id),
-    foreign key (pet_id) references PET(pet_id)
+    date DATE
 );
 

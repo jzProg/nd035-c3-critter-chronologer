@@ -1,5 +1,7 @@
 package com.udacity.jdnd.course3.critter.schedule.model;
 
+import com.udacity.jdnd.course3.critter.pet.model.Pet;
+import com.udacity.jdnd.course3.critter.user.model.Employee;
 import com.udacity.jdnd.course3.critter.user.model.EmployeeSkill;
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -13,11 +15,11 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Transient
-    private List<Long> petIds;
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy="pet_schedules", cascade = CascadeType.ALL)
+    private List<Pet> petIds;
 
-    @Transient
-    private List<Long> employeeIds;
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy="schedules", cascade = CascadeType.ALL)
+    private List<Employee> employeeIds;
 
     private LocalDate date;
 
@@ -35,19 +37,19 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<Long> getEmployeeIds() {
+    public List<Employee> getEmployeeIds() {
         return employeeIds;
     }
 
-    public void setEmployeeIds(List<Long> employeeIds) {
+    public void setEmployeeIds(List<Employee> employeeIds) {
         this.employeeIds = employeeIds;
     }
 
-    public List<Long> getPetIds() {
+    public List<Pet> getPetIds() {
         return petIds;
     }
 
-    public void setPetIds(List<Long> petIds) {
+    public void setPetIds(List<Pet> petIds) {
         this.petIds = petIds;
     }
 
